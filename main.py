@@ -24,6 +24,24 @@ if slack_client.rtm_connect():
 
                 print "Message received: %s" % json.dumps(message, indent=2)
 
+                if message['text'].find("hello") > -1:
+                    slack_client.api_call(
+                        "chat.postMessage",
+                        channel = message['channel'],
+                        text = "I am coffeebot, what is my purpose?",
+                        as_user = True
+                    )
+                    continue
+
+                if message['text'].find("coffee") > -1:
+                    slack_client.api_call(
+                        "chat.postMessage",
+                        channel=message['channel'],
+                        text="https://media.giphy.com/media/BCkaO6X2PLG4E/giphy.gif",
+                        as_user=True
+                    )
+                    continue
+
                 camera = PiCamera()
 
                 try:
