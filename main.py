@@ -1,11 +1,11 @@
 import time
 import json
 import os
-from time import sleep
+import config
 from slackclient import SlackClient
 from picamera import PiCamera
 
-slack_client = SlackClient()
+slack_client = SlackClient(config.slack_key)
 
 # Fetch your Bot's User ID
 user_list = slack_client.api_call("users.list")
@@ -24,8 +24,6 @@ if slack_client.rtm_connect():
 
                 print "Message received: %s" % json.dumps(message, indent=2)
 
-                print "Is file readable? " + "true" if os.access('img.jpg', os.R_OK) else "false"
-
                 slack_client.api_call(
                     "chat.postMessage",
                     channel=message['channel'],
@@ -35,10 +33,11 @@ if slack_client.rtm_connect():
 
                 camera = PiCamera()
 
-                camera.resolution(320, 240)
-                camera.start_preview()
-                sleep(2)
-                camera.capture('img.jpg')
+                try:
+                    camera.resolution = (640, 480)
+                    camera.capture('img.jpg')
+                finally:
+                    camera.close()
 
                 slack_client.api_call(
                     'files.upload',
@@ -47,5 +46,7 @@ if slack_client.rtm_connect():
                     file=open('img.jpg', 'rb'),
                     as_user=True
                 )
+
+                os.remove('img.jpg')
 
         time.sleep(1)
