@@ -35,9 +35,10 @@ if slack_client.rtm_connect():
 
                 if message['text'].find("coffee") > -1:
                     slack_client.api_call(
-                        "chat.postMessage",
-                        channel=message['channel'],
-                        text="https://media.giphy.com/media/BCkaO6X2PLG4E/giphy.gif",
+                        'files.upload',
+                        channels=message['channel'],
+                        filename='ohmygod.gif',
+                        file=open('ohmygod.gif', 'rb'),
                         as_user=True
                     )
                     continue
