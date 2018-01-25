@@ -42,7 +42,7 @@ if slack_client.rtm_connect():
                 slack_client.api_call(
                     'files.upload',
                     channels=message['channel'],
-                    filename='test.jpg',
+                    filename='coffee.jpg',
                     file=open('img.jpg', 'rb'),
                     as_user=True
                 )
