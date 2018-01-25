@@ -24,13 +24,6 @@ if slack_client.rtm_connect():
 
                 print "Message received: %s" % json.dumps(message, indent=2)
 
-                slack_client.api_call(
-                    "chat.postMessage",
-                    channel=message['channel'],
-                    text="Sure thing, let me check on that",
-                    as_user=True
-                )
-
                 camera = PiCamera()
 
                 try:
