@@ -20,6 +20,16 @@ if slack_client.rtm_connect():
 
     while True:
         for message in slack_client.rtm_read():
+	    if 'text' in message and message['text'].startswith("@covfefebot") and 'user' in message and message['user'] != slack_user_id:
+		slack_client.api_call(
+		    'files.upload',
+		    channels=message['channel'],
+		    filename='covfefe.png',
+                    file=open('covfefe.png', 'rb'),
+		    as_user=True
+		)
+		continue
+
             if 'text' in message and message['text'].startswith("<@%s>" % slack_user_id) and 'user' in message and message['user'] != slack_user_id:
 
                 print "Message received: %s" % json.dumps(message, indent=2)
