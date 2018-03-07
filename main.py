@@ -1,76 +1,94 @@
 import time
-import json
-import os
 import config
 from slackclient import SlackClient
-from picamera import PiCamera
+from responder import Covfefe, Debug, Hello, Img, Ip, OhMyGod
+from camera import Camera
 
+
+# Initialize the Slack client
 slack_client = SlackClient(config.slack_key)
 
-# Fetch your Bot's User ID
-user_list = slack_client.api_call("users.list")
-for user in user_list.get('members'):
-    if user.get('name') == config.bot_name:
-        slack_user_id = user.get('id')
-        break
+# Initialize the camera
+camera = Camera().get()
+
+# "Register" our responders
+responders = [
+    Covfefe(slack_client, config),
+    Debug(slack_client, config),
+    Hello(slack_client, config),
+    Img(slack_client, config, camera),
+    Ip(slack_client, config),
+    OhMyGod(slack_client, config),
+]
 
 # Start connection
 if slack_client.rtm_connect():
-    print("Connected!")
+    print("Connected to Slack server!")
+
+    # If the bot (user) ID isn't set in the config, try to find it based on name
+    if not config.bot_id:
+        print("No bot ID set, fetch user list...")
+        # Fetch your Bot's User ID
+        user_list = slack_client.api_call("users.list")
+        print("Found {0} users".format(len(user_list.get('members'))))
+
+        for user in user_list.get('members'):
+            if user.get('name') == config.bot_name:
+                config.bot_id = user.get('id')
+                break
+
+    # If it still isn't set (ie: the above method failed to find a suitable user ID) then raise an exception
+    if not config.bot_id:
+        raise Exception('A `bot_id` value was not set in the config, either set it explicitly or set the bot name')
+
+    print("Using user ID of `{0}`".format(config.bot_id))
+
+    # Now get the channel ID if it's not set explicitly in the config
+    if not config.channel_id:
+        print("No channel ID set, fetching channel list...")
+
+        channels = slack_client.api_call('channels.list', exclude_archived=1)
+
+        print("Found {0} channels".format(len(channels['channels'])))
+
+        if not config.channel_id or config.channel_id == "":
+            for channel in channels['channels']:
+                if channel['name'] == config.channel_name:
+                    config.channel_id = channel['id']
+                    print("Found channel `{0}` as ID `{1}`, joining...".format(channel['name'], channel['id']))
+                    break
+
+    # If it still isn't set (the channel ID) then raise an exception
+    if not config.channel_id:
+        raise Exception('Channel ID for `{0}` could not be found, does the channel exist?'.format(config.channel_name))
+
+    print("Joining channel with ID `{0}`".format(config.channel_id))
+
+    slack_client.api_call(
+        'channels.join',
+        channel=config.channel_id
+    )
 
     while True:
         for message in slack_client.rtm_read():
-            if 'text' in message and message['text'].startswith("@covfefebot") and 'user' in message and message[
-                'user'] != slack_user_id:
-                slack_client.api_call(
-                    'files.upload',
-                    channels=message['channel'],
-                    filename='covfefe.png',
-                    file=open('resources/covfefe.png', 'rb'),
-                    as_user=True
-                )
+
+            # Skip this message if we don't have a `text` field
+            if 'text' not in message:
                 continue
 
-            if 'text' in message and message['text'].startswith("<@%s>" % slack_user_id) and 'user' in message and \
-                    message['user'] != slack_user_id:
+            # Skip this message if it's from the bot
+            if 'user' not in message or message['user'] == config.bot_id:
+                continue
 
-                print("Message received: %s" % json.dumps(message, indent=2))
+            print("Found message, attempting to locate responder using `{0}`".format(message))
 
-                if message['text'].find("hello") > -1:
-                    slack_client.api_call(
-                        "chat.postMessage",
-                        channel=message['channel'],
-                        text="I am coffeebot, what is my purpose?",
-                        as_user=True
-                    )
-                    continue
+            # Now loop over the responders and find any that match - including multiple responses
+            for responder in responders:
+                if responder.can_handle(message):
+                    responder.handle(message)
 
-                if message['text'].find("coffee") > -1:
-                    slack_client.api_call(
-                        'files.upload',
-                        channels=message['channel'],
-                        filename='ohmygod.gif',
-                        file=open('resources/ohmygod.gif', 'rb'),
-                        as_user=True
-                    )
-                    continue
-
-                camera = PiCamera()
-
-                try:
-                    camera.resolution = (640, 480)
-                    camera.capture('img.jpg')
-                finally:
-                    camera.close()
-
-                slack_client.api_call(
-                    'files.upload',
-                    channels=message['channel'],
-                    filename='coffee.jpg',
-                    file=open('img.jpg', 'rb'),
-                    as_user=True
-                )
-
-                os.remove('img.jpg')
+                    # If the responder should halt after matching (to prevent multiple responses) then break
+                    if responder.halt_on_match:
+                        break
 
         time.sleep(1)
