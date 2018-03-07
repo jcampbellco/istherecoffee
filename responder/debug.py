@@ -3,6 +3,15 @@ from slackclient import SlackClient
 
 
 class Debug(Responder):
+    """
+    A debug helper response, expects one of two messages: `@coffeebot debug enable|disable`
+
+    If debug mode is enabled, coffeebot will send an IM to the last user to say `debug enable`, it will contain
+        the entire message body, wrapped in a codeblock for readability
+
+    Keep in mind Debug should probably be the very first response handler, since other handlers can potentially stop
+        the response chain
+    """
     def __init__(self, slackclient: SlackClient, config):
         super().__init__(slackclient, config)
         self.debug_enabled = False

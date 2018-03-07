@@ -2,6 +2,9 @@ from responder.responder import Responder
 
 
 class Covfefe(Responder):
+    """
+    Responds to messages that start with @covfefebot with a joke picture
+    """
     def can_handle(self, message):
         return message['text'].startswith("@covfefebot")
 

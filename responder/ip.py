@@ -3,6 +3,10 @@ import socket
 
 
 class Ip(Responder):
+    """
+    Responds with the local IP address for the Pi (in case I forget the IP and need to SSH in)
+    Looks for a message like `@coffeebot ip`
+    """
     def can_handle(self, message):
         return message['text'].find("<@%s>" % self.config.bot_id) and \
                 message['text'].find("ip") > -1

@@ -2,6 +2,9 @@ from responder.responder import Responder
 
 
 class Hello(Responder):
+    """
+    The simplest responder, just asks
+    """
     def can_handle(self, message):
         return message['text'].find("<@%s>" % self.config.bot_id) > -1 \
                 and message['text'].find('hello') > -1
