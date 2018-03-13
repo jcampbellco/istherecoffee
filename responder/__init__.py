@@ -4,6 +4,7 @@ from .hello import Hello
 from .img import Img
 from .ip import Ip
 from .ohmygod import OhMyGod
+from .ayy import Ayy
 
 
 __all__ = [
@@ -13,4 +14,5 @@ __all__ = [
     'Img',
     'Ip',
     'OhMyGod',
+    'Ayy',
 ]

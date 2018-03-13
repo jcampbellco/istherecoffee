@@ -1,7 +1,7 @@
 import time
 import config
 from slackclient import SlackClient
-from responder import Covfefe, Debug, Hello, Img, Ip, OhMyGod
+from responder import Covfefe, Debug, Hello, Img, Ip, OhMyGod, Ayy
 from camera import Camera
 
 
@@ -19,6 +19,7 @@ responders = [
     Img(slack_client, config, camera),
     Ip(slack_client, config),
     OhMyGod(slack_client, config),
+    Ayy(slack_client, config),
 ]
 
 # Start connection
