@@ -81,6 +81,15 @@ if slack_client.rtm_connect():
         channel=config.channel_id
     )
 
+    # Call announcing the bot has joined
+    slack_client.api_call(
+        'files.upload',
+        channels=config.channel_id,
+        filename='imbackbitches.gif',
+        file=open('resources/imbackbitches.gif', 'rb'),
+        as_user=True
+    )
+
     while True:
         for message in slack_client.rtm_read():
 
