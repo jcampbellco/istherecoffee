@@ -1,8 +1,9 @@
-from .camera import Camera
+# Bad dependency? Not sure
+# from .camera import Camera
 from picamera import PiCamera as PiCam
 
 
-class PiCamera(Camera):
+class PiCamera(object):
     def get_image(self):
         camera = PiCam()
 
