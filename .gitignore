@@ -1,5 +1,6 @@
 .idea
 img.jpg
 config.py
+config.pyc
 venv
 __pycache__

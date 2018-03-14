@@ -1,9 +1,16 @@
 import time
 import config
 from slackclient import SlackClient
-from responder import Covfefe, Debug, Hello, Img, Ip, OhMyGod, Ayy
+from responder import \
+    Covfefe, \
+    Debug, \
+    Hello, \
+    Img, \
+    Ip, \
+    OhMyGod, \
+    Ayy, \
+    Ayymote
 from camera import Camera
-
 
 # Initialize the Slack client
 slack_client = SlackClient(config.slack_key)
@@ -13,13 +20,14 @@ camera = Camera().get()
 
 # "Register" our responders
 responders = [
+    Ayy(slack_client, config),
+    Ayymote(slack_client, config),
     Covfefe(slack_client, config),
     Debug(slack_client, config),
     Hello(slack_client, config),
     Img(slack_client, config, camera),
     Ip(slack_client, config),
     OhMyGod(slack_client, config),
-    Ayy(slack_client, config),
 ]
 
 # Start connection
