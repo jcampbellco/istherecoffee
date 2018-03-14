@@ -10,13 +10,16 @@ from responder import \
     OhMyGod, \
     Ayy, \
     Ayymote
-from camera import Camera
+from camera.picamera import PiCamera
 
 # Initialize the Slack client
 slack_client = SlackClient(config.slack_key)
 
 # Initialize the camera
-camera = Camera().get()
+# camera = Camera().get()
+# Having trouble getting this setup working, it _should_ check and see if the PiCamera module is even available, and if
+# so, return the appropriate camera, but don't do. So for now, just swap out manually
+camera = PiCamera()
 
 # "Register" our responders
 responders = [
