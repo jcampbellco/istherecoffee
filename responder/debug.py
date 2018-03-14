@@ -19,7 +19,8 @@ class Debug(Responder):
 
     def can_handle(self, message):
         return message['text'].find('<@%s>' % self.config.bot_id) > -1 and \
-                message['text'].find('debug') > -1 or self.debug_enabled is True
+                message['text'].find('debug') > -1 or \
+                self.debug_enabled is True
 
     def handle(self, message):
         if message['text'].find('enable') > -1:

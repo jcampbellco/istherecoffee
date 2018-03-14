@@ -8,7 +8,7 @@ class Ip(Responder):
     Looks for a message like `@coffeebot ip`
     """
     def can_handle(self, message):
-        return message['text'].find("<@%s>" % self.config.bot_id) and \
+        return message['text'].find("<@%s>" % self.config.bot_id) > -1 and \
                 message['text'].find("ip") > -1
 
     def handle(self, message):
