@@ -1,11 +1,10 @@
-# Bad dependency? Not sure
-# from .camera import Camera
-from picamera import PiCamera as PiCam
+from .camera import Camera
+from picamera import PiCamera
 
 
-class PiCamera(object):
+class RealCamera(Camera):
     def get_image(self):
-        camera = PiCam()
+        camera = PiCamera()
 
         try:
             camera.resolution = (640, 480)
