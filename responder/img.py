@@ -23,8 +23,7 @@ class Img(Responder):
 
     def can_handle(self, message):
         return message['text'].find("<@%s>" % self.config.bot_id) > -1 and \
-                message['text'].find('is there coffee') > -1 or \
-                message['text'].strip() == "<@%s>".format(self.config.bot_id)
+                message['text'].strip() == "<@{0}>".format(self.config.bot_id)
 
     def handle(self, message):
         print('Taking image...')

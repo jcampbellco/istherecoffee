@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1a773ad50ea3f34ab2860e9ead5e7f9236c2b08d2b21a3a7f87f5de8ac888d1c"
+            "sha256": "8a0620a5a4b70653c7086d84056ab51d6ab9945b7fb84ae09290e3b9d8ef420d"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -32,7 +32,6 @@
         },
         "config": {
             "hashes": [
-		"sha256:7cc444ff49a3271f1febe9ea6548a05fc844c7c2b8332cc6eed711ad669ea7aa",
                 "sha256:6aed191d1850483c73a614db01d95897e3da102438c7c2d2cbaa188bd923ff70"
             ],
             "index": "pypi",
@@ -44,6 +43,13 @@
                 "sha256:8c7309c718f94b3a625cb648ace320157ad16ff131ae0af362c9f21b80ef6ec4"
             ],
             "version": "==2.6"
+        },
+        "picamera": {
+            "hashes": [
+                "sha256:890815aa01e4d855a6a95dd3ad0953b872a6b954982106407df0c5a31a163e50"
+            ],
+            "index": "pypi",
+            "version": "==1.13"
         },
         "requests": {
             "hashes": [
@@ -61,7 +67,6 @@
         },
         "slackclient": {
             "hashes": [
-		"sha256:995a161f7ee3f72940975fe1e4129bc866f6e352429ef0ea86c92b72b532451d",
                 "sha256:146f5b1b7f4761fc8da8ac102c0f1fdc6f00a458c0b8349e156f93f7fef817f7"
             ],
             "index": "pypi",

@@ -9,6 +9,7 @@ name = "pypi"
 
 slackclient = "*"
 config = "*"
+picamera = "*"
 
 
 [dev-packages]
