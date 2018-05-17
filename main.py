@@ -9,7 +9,8 @@ from responder import \
     Ip, \
     OhMyGod, \
     Ayy, \
-    Ayymote
+    Ayymote, \
+    Life
 from camera.real_camera import RealCamera
 
 # Initialize the Slack client
@@ -30,6 +31,7 @@ responders = [
     Hello(slack_client, config),
     Img(slack_client, config, camera),
     Ip(slack_client, config),
+    Life(slack_client, config),
     OhMyGod(slack_client, config),
 ]
 
